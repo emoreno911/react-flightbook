@@ -28,4 +28,6 @@ function getAirportsList() {
 	});
 }
 
+// FETCH API https://davidwalsh.name/fetch
+
 export default { getAirportsList };

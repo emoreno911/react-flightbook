@@ -315,6 +315,13 @@ div.rotate span:nth-child(3) { animation-delay: .3s }
   margin-top: 10px;
 }
 
+.dateinput .calendar .center-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .dateinput .calendar .month,
 .dateinput .calendar .week,
 .dateinput .calendar .days { 
@@ -328,6 +335,13 @@ div.rotate span:nth-child(3) { animation-delay: .3s }
   justify-content: space-around;
   background-color: var(--app-accent-color);
   margin-left: -5px; 
+}
+
+.dateinput .calendar .month i {
+  width: 24px;
+  display: inline-block;
+  text-align: center;
+  cursor: pointer;
 }
 
 .dateinput .calendar .week,
@@ -368,10 +382,6 @@ div.rotate span:nth-child(3) { animation-delay: .3s }
   background-color: rgba(112, 225, 245, 0.3);
   border-radius: 50%;
   transition: all .4s ease;
-}
-
-.dateinput .calendar .days span:first-child {
-  color: transparent;
 }
 
 .info-message { 

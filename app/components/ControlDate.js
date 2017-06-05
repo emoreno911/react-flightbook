@@ -81,15 +81,14 @@ class ControlDate extends React.Component {
 		this.setState(prevState => {
 			prevState.calendarDate.day = selectedDay;
 			prevState.dateSelected = {
-				day: selectedDay,
+				day: parseInt(selectedDay),
 				weekDay,
 				monthName,
 				month,
 				year
 			};
-
 			return prevState;
-		}); 
+		});
 	}
 
 	handleOpenControl() {
@@ -170,17 +169,19 @@ class ControlDate extends React.Component {
 								onClick={this.handleChangeMonth}>
 							</i>
 						</div>
-						<div className="week">
-							<span>S</span>
-							<span>M</span>
-							<span>T</span>
-							<span>W</span>
-							<span>T</span>
-							<span>F</span>
-							<span>S</span>
-						</div>
-						<div className="days">
-							{daysRender}
+						<div className="center-content">
+							<div className="week">
+								<span>S</span>
+								<span>M</span>
+								<span>T</span>
+								<span>W</span>
+								<span>T</span>
+								<span>F</span>
+								<span>S</span>
+							</div>
+							<div className="days">
+								{daysRender}
+							</div>
 						</div>
 					</div>
 				</div>
