@@ -68,7 +68,7 @@ body {
 .header .bg {
   background-image: url(../../img/bg-city.jpg);
   background-size: 380px;
-  opacity: 0;
+  opacity: 1;
   transition: all 0.8s ease;
 }
 
@@ -77,21 +77,19 @@ body {
   height: 100%;
   background-image: url(../../img/map2.png);
   background-position: -110px -150px;
-  /*background-position: -120px -120px;
-  background-size: 680px;*/
-  opacity: 1;
+  opacity: 0;
   transition: all .4s ease;
   position: absolute;
   transition: all .4s ease;
 }
 
 .header .title {
-  display: none;
+  display: flex;
   align-items: center;
-    justify-content: space-around;
-    font-size: 2em;
-    color: #fff;
-    height: 100%;
+  justify-content: space-around;
+  font-size: 2em;
+  color: #fff;
+  height: 100%;
 }
 
 .title > div { z-index: 10; }
@@ -222,7 +220,8 @@ div.rotate span:nth-child(3) { animation-delay: .3s }
   cursor: pointer;
 }
 
-.control .control-body { 
+.control .control-body {
+  position: relative; 
   height: calc(100% - 72px);
   margin-top: 20px;
 }
@@ -249,7 +248,7 @@ div.rotate span:nth-child(3) { animation-delay: .3s }
 /*** Begin Select Input ***/
 .select .nano { 
   width: calc(100% - 50px);
-  height: 418px;
+  height: 100%;
   margin-left: 50px;
 }
 
@@ -283,6 +282,7 @@ div.rotate span:nth-child(3) { animation-delay: .3s }
 
 .select ul.select-data li.sep {
   background-color: var(--app-accent-color);
+  margin-right: 5px;
 }
 
 .select ul.select-index {  
@@ -319,11 +319,12 @@ div.rotate span:nth-child(3) { animation-delay: .3s }
 .dateinput .calendar .week,
 .dateinput .calendar .days { 
   display: flex; 
-  width: 100%;
+  width: 350px;
   padding: 5px; 
 }
 
 .dateinput .calendar .month { 
+  width: 100%;
   justify-content: space-around;
   background-color: var(--app-accent-color);
   margin-left: -5px; 
@@ -662,6 +663,32 @@ div.rotate span:nth-child(3) { animation-delay: .3s }
   }
 }
 
+/*Scrollbar*/
+.nano > .nano-content {
+  height: 100%;
+  overflow: auto;
+  overflow-x: hidden;
+}
+
+.nano > .nano-content::-webkit-scrollbar {
+  display: none;
+  width: 6px;
+  height: 6px; }
+
+.open .nano > .nano-content::-webkit-scrollbar {
+  display: block;
+}
+
+.nano > .nano-content::-webkit-scrollbar-track {
+  background-color: #eaeaea;
+  border-left: none; }
+
+.nano > .nano-content::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2); }
+
+.nano > .nano-content::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.4); }
+  
 
 @media (min-width: 767px) {
   body { background-color: #e7e7e7; overflow: hidden; }

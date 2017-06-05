@@ -27,14 +27,13 @@ class App extends React.Component {
       <Router>
         <div className="wrap">
           <Headbar />
-
           <Header />
 
           <Switch>
             <Route exact path="/" component={Form} />
             <Route exact path="/flights" component={FlightList} />
             <Route path="/ticket" component={Ticket} />
-            <Route render={() => <p>Not Found</p>} />
+            <Route render={() => <div className="content"><h3>Not Found</h3></div>} />
           </Switch>
         </div>
       </Router>

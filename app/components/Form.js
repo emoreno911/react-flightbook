@@ -19,9 +19,9 @@ class Form extends React.Component {
 	componentDidMount() {
 		//this.updateLanguage(this.state.selectedLanguage) //camelCase
 		api.getAirportsList()
-		.then(result => {
-			this.setState({ airports: result });
-		});
+			.then(result => {
+				this.setState({ airports: result });
+			});
 	}
 
 	render() {
@@ -31,12 +31,14 @@ class Form extends React.Component {
 		    	<ControlSelect 
 		    		data={this.state.airports} 
 		    		label="From" 
-		    		text="DUB, Dublin Airport" 
+		    		placeholder="Your departure place"
+						selected={{IATA: 'DUB', name: 'Dublin Airport'}} 
 		    	/>
 		    	<ControlSelect
 		    		data={this.state.airports} 
 		    		label="To" 
-		    		text="MRS, Marseille Provence Airport" 
+		    		placeholder="Your destiny place" 
+						selected={{IATA: 'HAM', name: 'Hamburg Airport'}}
 		    	/>
 		    	<ControlDate />
 		    	<ControlPassengers />

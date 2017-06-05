@@ -1,45 +1,140 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 
 
-class ControlSelect extends React.Component {
-  render() {
-  	const airports = this.props.data;
-  	const airportsRender = _.map(airports, (countryOpts, countryName) => {
-		let firstLeter = countryName.split('')[0],
-			arr = [];
+function ControlSelectList(props) {
+	const airportsRender = _.map(props.data, (countryOpts, countryName) => {
+		let firstLeter = countryName.split('')[0];
+		let arr = [];
+		
+		arr.push(
+			<li
+				className="sep"
+				key={countryName}  
+				data-index={firstLeter}>
+					{countryName}
+			</li>
+		);
 
-		arr.push(<li className="sep" data-index={firstLeter}>{countryName}</li>);
-
-		countryOpts.forEach((airport, i) => {
-			arr.push(<li data-iata={airport.IATA} data-city={airport.city}>{airport.IATA}, {airport.name}</li>);
+		countryOpts.forEach((airport, i) => { 
+			arr.push(
+				<li
+					key={airport.IATA} 
+					className={(props.selectedId === airport.IATA)? 'selected' : ''}
+					onClick={() => props.onOptionSelected(airport)}
+				>
+					{airport.IATA}, {airport.name}
+				</li>);
 		});
 
 		return arr;
 	});
 
-    return (
-		<div className="control select">
-			<div className="control-head">
-				<i className="zmdi zmdi-flight-takeoff"></i>
-				<span className="close"><i className="zmdi zmdi-close"></i></span>
-				<div>
-					<h6>{this.props.label}</h6>
-					<span className="airport-name" data-role="from">{this.props.text}</span>
-				</div>			
-			</div>
-			<div className="control-body">
-				<ul className="select-index"></ul>
-				<div className="nano">
-				    <div className="nano-content">
-				    	<ul className="select-data">
-				    		{airportsRender}
-				    	</ul>
-				    </div>
+	return (
+		<ul className="select-data">
+			{airportsRender}
+		</ul>
+	);
+}
+
+function ControlSelectIndex(props) {
+	let leters = _.chain(props.data)
+				.keys()
+				.map(cname => cname.split('')[0])
+				.uniq()
+				.value();
+	return (
+		<ul className="select-index">
+			{leters.map(leter => (
+				<li 
+					key={leter}
+					onClick={() => props.onIndexSelected(leter)}
+				>
+					{leter}
+				</li>
+			))}
+		</ul>
+	);
+}
+
+class ControlSelect extends React.Component {
+  	constructor(props) {
+		super();
+		this.state = {
+		  isOpen: false,
+		  selectedValue: {}
+		};
+
+		this.handleOpenControl = this.handleOpenControl.bind(this);
+		this.handleCloseControl = this.handleCloseControl.bind(this);
+	}
+
+	componentDidMount() {
+		this.setState({ selectedValue: this.props.selected });
+		// Recommended form
+		// this.setState(prevState => ({
+		// 	selectedValue: prevState.selected
+		// }));
+	}
+
+	handleOpenControl() {
+		if (this.state.isOpen)
+			return;
+		this.setState({isOpen: true}); 
+	}
+
+	handleCloseControl() {
+		this.setState({isOpen: false});
+	}
+
+	handleIndexSelected(index) {
+		const $content = ReactDOM.findDOMNode(this.refs.content);
+		const $selected = $content.querySelector(`.select-data .sep[data-index="${index}"]`);
+		$content.scrollTop = $selected.offsetTop;
+	}
+
+	handleOptionSelected(opt) {
+		this.setState({
+			selectedValue: opt,
+			isOpen: false
+		});
+	}
+
+	render() {
+		const clsOpen = (this.state.isOpen)? 'open' : '';
+		const {IATA, name} = this.state.selectedValue;
+		const selectedText = (IATA === undefined)? this.props.placeholder : `${IATA}, ${name}`; 
+
+		return (
+			<div className={`control select ${clsOpen}`}>
+				<div className="control-head" onClick={this.handleOpenControl}>
+					<i className="zmdi zmdi-flight-takeoff"></i>
+					<span className="close" onClick={this.handleCloseControl}>
+						<i className="zmdi zmdi-close"></i>
+					</span>
+					<div>
+						<h6>{this.props.label}</h6>
+						<span className="airport-name">{selectedText}</span>
+					</div>			
+				</div>
+				<div className="control-body">
+					<ControlSelectIndex 
+						data={this.props.data}
+						onIndexSelected={index => this.handleIndexSelected(index)} 
+					/>
+					<div className="nano">
+						<div className="nano-content" ref="content">
+							<ControlSelectList 
+								data={this.props.data}
+								selectedId={IATA}
+								onOptionSelected={opt => this.handleOptionSelected(opt)}
+							/>
+						</div>
+					</div>
 				</div>
 			</div>
-		</div>
-    )
-  }
+			)
+		}
 }
 
 export default ControlSelect;
