@@ -21,13 +21,25 @@ function _get(url) {
 }
 
 function getAirportsList() {
-	var request = _get('assets/airports.json');
+	let request = _get('assets/airports.json');
 	
 	return request.then(response => {
-		return _.groupBy(response, o => o.country);
+		return response;
+		//return _.groupBy(response, o => o.country);
+	});
+}
+
+function getFlights(data) {
+	let request = _get('assets/flights.json');
+	
+	return request.then(response => {
+		return response;
 	});
 }
 
 // FETCH API https://davidwalsh.name/fetch
 
-export default { getAirportsList };
+export default { 
+	getAirportsList,
+	getFlights
+};

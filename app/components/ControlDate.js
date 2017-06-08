@@ -16,7 +16,7 @@ class ControlDate extends React.Component {
 	}
 
 	componentDidMount() {
-		const today = new Date();
+		const today = new Date(this.props.selected);
 		const [weekDay, day, monthName, year,,] = today.toUTCString().split(' ');
 		const dateSelected = {
 				day: today.getDate(),
@@ -89,6 +89,9 @@ class ControlDate extends React.Component {
 			};
 			return prevState;
 		});
+
+		if(this.props.onChange)
+			this.props.onChange(date.getTime());
 	}
 
 	handleOpenControl() {

@@ -62,6 +62,7 @@ class ControlSelect extends React.Component {
 		super();
 		this.state = {
 		  isOpen: false,
+		  airports: [],
 		  selectedValue: {}
 		};
 
@@ -70,11 +71,18 @@ class ControlSelect extends React.Component {
 	}
 
 	componentDidMount() {
-		this.setState({ selectedValue: this.props.selected });
 		// Recommended form
 		// this.setState(prevState => ({
 		// 	selectedValue: prevState.selected
 		// }));
+	}
+
+	componentWillReceiveProps(nextProps) {
+		//console.log('newProps');
+		this.setState({
+			airports: _.groupBy(nextProps.data, o => o.country),
+			selectedValue: _.findWhere(nextProps.data, {IATA: nextProps.selected})
+		});
 	}
 
 	handleOpenControl() {
@@ -95,14 +103,17 @@ class ControlSelect extends React.Component {
 
 	handleOptionSelected(opt) {
 		this.setState({
-			selectedValue: opt,
+			//selectedValue: opt,
 			isOpen: false
 		});
+
+		if(this.props.onChange)
+			this.props.onChange(opt.IATA);
 	}
 
 	render() {
 		const clsOpen = (this.state.isOpen)? 'open' : '';
-		const {IATA, name} = this.state.selectedValue;
+		const {IATA, name} = this.state.selectedValue || {};
 		const selectedText = (IATA === undefined)? this.props.placeholder : `${IATA}, ${name}`; 
 
 		return (
@@ -119,13 +130,13 @@ class ControlSelect extends React.Component {
 				</div>
 				<div className="control-body">
 					<ControlSelectIndex 
-						data={this.props.data}
+						data={this.state.airports}
 						onIndexSelected={index => this.handleIndexSelected(index)} 
 					/>
 					<div className="nano">
 						<div className="nano-content" ref="content">
 							<ControlSelectList 
-								data={this.props.data}
+								data={this.state.airports}
 								selectedId={IATA}
 								onOptionSelected={opt => this.handleOptionSelected(opt)}
 							/>

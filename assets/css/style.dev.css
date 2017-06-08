@@ -23,7 +23,7 @@ body {
   background-color: var(--app-bg-color); 
   position: relative;
   display: block;
-  height: 610px;
+  height: 620px;
   /*width: 365px;*/
   margin: 10px auto;
   box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.3);
@@ -446,6 +446,7 @@ div.rotate span:nth-child(3) { animation-delay: .3s }
   border-bottom: solid 1px #444;
 }
 
+.control .btnSearch,
 .control > button {
   width: 100%;
   height: 100%;
@@ -458,7 +459,17 @@ div.rotate span:nth-child(3) { animation-delay: .3s }
   text-transform: uppercase;
 }
 
+.control .btnSearch:hover,
 .control button:hover { background-color: rgba(255,255,255, .2); }
+
+.control .btnSearch {
+  padding: 0;
+  text-align: center;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 .list article {
   display: flex;
@@ -703,7 +714,11 @@ div.rotate span:nth-child(3) { animation-delay: .3s }
 @media (min-width: 767px) {
   body { background-color: #e7e7e7; overflow: hidden; }
 
-  .wrap { display: flex; max-width: 1200px; }
+  .wrap { 
+    display: flex; 
+    max-width: 1200px;
+    height: 610px; 
+  }
   .headbar {
     position: absolute;
     z-index: 10;

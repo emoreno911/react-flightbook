@@ -4,10 +4,10 @@ class ControlPassengers extends React.Component {
 	constructor(props) {
 		super();
 		this.state = {
-		  selectedOption: 'adults',
-		  adults: 1,
-			kids: 0,
-			elders: 0
+		  	selectedOption: 'adults',
+		  	adults: props.selected.adults,
+			kids: props.selected.kids,
+			elders: props.selected.elders
 		};
 
 		this.handleUpdateQty = this.handleUpdateQty.bind(this);
@@ -23,7 +23,13 @@ class ControlPassengers extends React.Component {
 			else if (value !== 0)
 				value--;
 
-			return {[prevState.selectedOption]: value};
+			prevState[prevState.selectedOption] = value;
+			
+			if(this.props.onChange)
+				this.props.onChange(prevState);
+
+			//return {[prevState.selectedOption]: value};
+			return prevState;
 		});
 	}
 

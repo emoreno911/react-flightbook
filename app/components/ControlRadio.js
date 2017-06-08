@@ -4,7 +4,7 @@ class ControlRadio extends React.Component {
 	constructor(props) {
 		super();
 		this.state = {
-		  selectedOption: 'economy'
+		  selectedOption: props.selected
 		};
 
 		this.handleOptionChange = this.handleOptionChange.bind(this);
@@ -14,6 +14,9 @@ class ControlRadio extends React.Component {
 		this.setState({
 			selectedOption: evt.target.value
 		});
+
+		if(this.props.onChange)
+			this.props.onChange(evt.target.value);
 	}
 
   render() {
