@@ -71,17 +71,20 @@ class ControlSelect extends React.Component {
 	}
 
 	componentDidMount() {
-		// Recommended form
-		// this.setState(prevState => ({
-		// 	selectedValue: prevState.selected
-		// }));
+		// to set airports data after navigate
+		this.updateStates(this.props);
 	}
 
 	componentWillReceiveProps(nextProps) {
+		if(nextProps.selected != this.state.selectedValue.IATA)
+			this.updateStates(nextProps);
+	}
+
+	updateStates(nextProps) {
 		//console.log('newProps');
 		this.setState({
 			airports: _.groupBy(nextProps.data, o => o.country),
-			selectedValue: _.findWhere(nextProps.data, {IATA: nextProps.selected})
+			selectedValue: _.findWhere(nextProps.data, {IATA: nextProps.selected}) || {}
 		});
 	}
 

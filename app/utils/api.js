@@ -37,7 +37,29 @@ function getFlights(data) {
 	});
 }
 
-// FETCH API https://davidwalsh.name/fetch
+/** QPX request
+ * {
+  "request": {
+    "slice": [
+      {
+        "origin": "DUB",
+        "destination": "HAM",
+        "date": "2017-06-12",
+        "preferredCabin": "BUSINESS|COACH|FIRST"
+      }
+    ],
+    "passengers": {
+      "adultCount": 1,
+      "infantInLapCount": 0,
+      "infantInSeatCount": 0,
+      "childCount": 1,
+      "seniorCount": 1
+    },
+    "solutions": 10,
+    "refundable": false
+  }
+}
+ * **/
 
 export default { 
 	getAirportsList,

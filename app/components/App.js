@@ -9,6 +9,7 @@ import FlightList from './FlightList';
 import Header from './Header';
 import Form from './Form';
 import Ticket from './Ticket';
+import api from '../utils/api';
 
 
 function Headbar(props) {
@@ -28,24 +29,50 @@ class App extends React.Component {
   constructor() {
     super();
     this.state = {
-      from: 'DUB',
-      to: 'HAM',
-      date: Date.now(),
-      passengers: {
-        adults: 1,
-        kids: 0,
-        elders: 0
-      },
-      fclass: 'economy'
+      airports: [],
+      flights: {},
+      selectedFlight: {},
+      form: {
+        from: 'DUB',
+        to: 'HAM',
+        date: Date.now(),
+        passengers: {
+          adults: 1,
+          kids: 0,
+          elders: 0
+        },
+        fclass: 'economy'
+      }
     };
-
+    
     this.handleFormChange = this.handleFormChange.bind(this);
+    this.handleSearchFlights = this.handleSearchFlights.bind(this);
+    this.handleFlightSelected = this.handleFlightSelected.bind(this);
   }
 
-  handleFormChange(type, val) {
-    this.setState({
-      [type]: val
+  componentDidMount() {
+		api.getAirportsList()
+			.then(result => {
+				this.setState({ airports: result });
+			});
+	}
+
+  handleSearchFlights() {
+    api.getFlights(this.state.form)
+			.then(result => {
+				this.setState({ flights: result });
+			});
+  }
+
+  handleFormChange(key, val) {
+    this.setState(prevState => {
+      prevState.form[key] = val;
+      return prevState;
     });
+  }
+
+  handleFlightSelected(flight) {
+    this.setState({ selectedFlight: flight });
   }
 
   handleGoBack() {
@@ -53,22 +80,33 @@ class App extends React.Component {
   }
 
   render() {
+    const wrapCls = (location.pathname === '/ticket')? 'wrap headerCollapsed' : 'wrap';
     return (
       <Router>
-        <div className="wrap">
+        <div className={wrapCls}>
           <Headbar onGoBack={this.handleGoBack} />
-          <Header from={this.state.from} to={this.state.to} />
+          <Header from={this.state.form.from} to={this.state.form.to} />
 
           <Switch>
             <Route exact path="/" render={props => (
               <Form {...props} 
-                    data={this.state} 
+                    formData={this.state.form}
+                    airports={this.state.airports} 
                     onFormChanged={this.handleFormChange} />
             )}/>
             <Route exact path="/flights" render={props => (
-              <FlightList {...props} data={this.state} />
+              <FlightList {...props} 
+                    flights={this.state.flights}
+                    passengers={this.state.form.passengers}
+                    searchFlights={this.handleSearchFlights}
+                    onFlightSelected={this.handleFlightSelected} />
             )}/>
-            <Route path="/ticket" component={Ticket} />
+            <Route exact path="/ticket" render={props => (
+              <Ticket {...props} 
+                    formData={this.state.form}
+                    flights={this.state.flights}
+                    selectedFlight={this.state.selectedFlight} />
+            )}/>
             <Route render={() => <div className="content"><h3>Not Found</h3></div>} />
           </Switch>
         </div>

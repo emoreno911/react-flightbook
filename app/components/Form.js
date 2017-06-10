@@ -4,40 +4,23 @@ import ControlPassengers from './ControlPassengers';
 import ControlSelect from './ControlSelect';
 import ControlRadio from './ControlRadio';
 import ControlDate from './ControlDate';
-import api from '../utils/api';
 
 
 class Form extends React.Component {
-	constructor(props) {
-		super();
-		this.state = {
-		  airports: []
-		};
-	}
-
-	componentDidMount() {
-		//this.updateLanguage(this.state.selectedLanguage) //camelCase
-		api.getAirportsList()
-			.then(result => {
-				this.setState({ airports: result });
-			});
-	}
-
 	render() {
-		//<Link className='btnSearch' to='/flights'>Search Flights</Link>
-		const {from, to, date, passengers, fclass} = this.props.data;
+		const {from, to, date, passengers, fclass} = this.props.formData;
 		return (
 		  <div className="content">
 		    <div className="form">
 		    	<ControlSelect 
-		    		data={this.state.airports} 
+		    		data={this.props.airports} 
 		    		label="From" 
 		    		placeholder="Your departure place"
 					selected={from}
 					onChange={(v) => this.props.onFormChanged('from', v)} 
 		    	/>
 		    	<ControlSelect
-		    		data={this.state.airports} 
+		    		data={this.props.airports} 
 		    		label="To" 
 		    		placeholder="Your destiny place" 
 					selected={to}
@@ -57,8 +40,8 @@ class Form extends React.Component {
 				/>
 
 		    	<div className="control">
-						<Link className='btnSearch' to='/flights'>Search Flights</Link>
-					</div>
+					<Link className='btnSearch' to='/flights'>Search Flights</Link>
+				</div>
 
 		    </div>
 		  </div>
