@@ -7,6 +7,10 @@ import ControlDate from './ControlDate';
 
 
 class Form extends React.Component {
+	componentDidMount() {
+    	this.props.setCurrentPath(location.pathname);
+  	}
+
 	render() {
 		const {from, to, date, passengers, fclass} = this.props.formData;
 		return (

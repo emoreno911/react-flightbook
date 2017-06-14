@@ -73,6 +73,10 @@ function TicketInfo(props) {
 
 
 class Ticket extends React.Component {
+  componentDidMount() {
+    this.props.setCurrentPath(location.pathname);
+  }
+
   bookFlight() {
     console.log('Flight Booked, Happy Trip :D');
   }

@@ -9,6 +9,7 @@ import FlightList from './FlightList';
 import Header from './Header';
 import Form from './Form';
 import Ticket from './Ticket';
+import Feedback from './Feedback';
 import api from '../utils/api';
 
 
@@ -32,6 +33,8 @@ class App extends React.Component {
       airports: [],
       flights: {},
       selectedFlight: {},
+      lastQueryHash: '',
+      currentPath: '/',
       form: {
         from: 'DUB',
         to: 'HAM',
@@ -48,6 +51,7 @@ class App extends React.Component {
     this.handleFormChange = this.handleFormChange.bind(this);
     this.handleSearchFlights = this.handleSearchFlights.bind(this);
     this.handleFlightSelected = this.handleFlightSelected.bind(this);
+    this.handleSetCurrentPath = this.handleSetCurrentPath.bind(this);
   }
 
   componentDidMount() {
@@ -58,10 +62,27 @@ class App extends React.Component {
 	}
 
   handleSearchFlights() {
-    api.getFlights(this.state.form)
-			.then(result => {
-				this.setState({ flights: result });
-			});
+    const result = new Promise(resolve => {
+      // to avoid unnecesary requests
+      const currentQueryHash = api.getHashCode(JSON.stringify(this.state.form));
+
+      if (currentQueryHash !== this.state.lastQueryHash) {
+        this.setState({ flights: [] });
+        api.getFlights(this.state.form)
+          .then(result => {
+            this.setState({ 
+              flights: result,
+              lastQueryHash: currentQueryHash 
+            });
+
+            resolve();
+          });
+      }
+      else
+        resolve();
+    });
+
+    return result;
   }
 
   handleFormChange(key, val) {
@@ -75,12 +96,16 @@ class App extends React.Component {
     this.setState({ selectedFlight: flight });
   }
 
+  handleSetCurrentPath(path) {
+    this.setState({ currentPath: path });
+  }
+
   handleGoBack() {
     history.back();
   }
 
   render() {
-    const wrapCls = (location.pathname === '/ticket')? 'wrap headerCollapsed' : 'wrap';
+    const wrapCls = (this.state.currentPath === '/ticket')? 'wrap headerCollapsed' : 'wrap';
     return (
       <Router>
         <div className={wrapCls}>
@@ -92,6 +117,7 @@ class App extends React.Component {
               <Form {...props} 
                     formData={this.state.form}
                     airports={this.state.airports} 
+                    setCurrentPath={this.handleSetCurrentPath}
                     onFormChanged={this.handleFormChange} />
             )}/>
             <Route exact path="/flights" render={props => (
@@ -99,15 +125,17 @@ class App extends React.Component {
                     flights={this.state.flights}
                     passengers={this.state.form.passengers}
                     searchFlights={this.handleSearchFlights}
+                    setCurrentPath={this.handleSetCurrentPath}
                     onFlightSelected={this.handleFlightSelected} />
             )}/>
             <Route exact path="/ticket" render={props => (
               <Ticket {...props} 
                     formData={this.state.form}
                     flights={this.state.flights}
+                    setCurrentPath={this.handleSetCurrentPath}
                     selectedFlight={this.state.selectedFlight} />
             )}/>
-            <Route render={() => <div className="content"><h3>Not Found</h3></div>} />
+            <Route render={() => <Feedback text="Not Found" />} />
           </Switch>
         </div>
       </Router>

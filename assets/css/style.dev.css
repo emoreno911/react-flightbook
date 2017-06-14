@@ -459,6 +459,7 @@ div.rotate span:nth-child(3) { animation-delay: .3s }
 .list article div.img {
   width: 72px;
   height: 100%;
+  color: #92CDCF;
   background-color: rgba(255, 255, 255, 0.05);
   display: flex;
   align-items: center;
@@ -603,6 +604,11 @@ div.rotate span:nth-child(3) { animation-delay: .3s }
 .ticket button i {
   font-size: 16px;
     margin-right: 5px;
+}
+
+.feedback {
+  display: flex;
+  justify-content: center;
 }
 
 .btnHome { background-color: #432; }

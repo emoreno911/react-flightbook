@@ -1,4 +1,5 @@
 import React from 'react';
+import Feedback from './Feedback';
 
 function Flight(props) {
   //const { airport, aircraft, carrier, city, tax } = props.auxData;
@@ -52,8 +53,9 @@ class FlightList extends React.Component {
   }
 
   componentDidMount() { 
-    this.props.searchFlights();
-    setTimeout(() => this.setState({ showCls: 'show' }), 50);
+    this.props.setCurrentPath(location.pathname);
+    this.props.searchFlights()
+      .then(response => setTimeout(() => this.setState({ showCls: 'show' }), 50));
   }
 
   handleFlightClicked(flight) {
@@ -72,15 +74,18 @@ class FlightList extends React.Component {
         <div className={`list ${this.state.showCls}`}>
           <div className="nano">
 					    <div className="nano-content">
-              {!isEmpty && flights.map(flightData => (
-                <Flight 
-                  key={flightData.id}
-                  flightData={flightData} 
-                  auxData={this.props.flights.trips.data}
-                  passengers={this.props.passengers}
-                  onFlightClicked={this.handleFlightClicked} 
-                />
-              ))}		    	
+              {isEmpty 
+                ? <Feedback text="Loading..." />
+                : flights.map(flightData => (
+                  <Flight 
+                    key={flightData.id}
+                    flightData={flightData} 
+                    auxData={this.props.flights.trips.data}
+                    passengers={this.props.passengers}
+                    onFlightClicked={this.handleFlightClicked} 
+                  />
+                ))
+              }		    	
 					    </div>
 					</div>
         </div>
